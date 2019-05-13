@@ -34,8 +34,8 @@ echo "${PRIVATE_YML}" > config/private.yml
 set -x
 
 bosh_release_version=$( cat ../semver/version )
-ruby_blob=$(basename "$(ls ../"ruby-$RUBY_VERSION"/*)")
-ruby_version="$(cat ../"ruby-$RUBY_VERSION"/.resource/version)"
+ruby_blob=$(basename "$(ls ../"ruby"/*)")
+ruby_version="$(cat ../"ruby"/.resource/version)"
 rubygems_blob=$(basename "$(ls ../"rubygems-$RUBYGEMS_VERSION"/*)")
 rubygems_version="$(cat ../"rubygems-$RUBYGEMS_VERSION"/.resource/version)"
 yaml_blob=$(basename "$(ls ../"yaml-$LIBYAML_VERSION"/*)")
@@ -52,8 +52,8 @@ replace_if_necessary "yaml-$LIBYAML_VERSION" "$yaml_blob"
 
 echo "-----> $(date): Rendering package and job templates"
 
-git rm -r packages/*
-git rm -r jobs/*
+git rm -r packages/ruby-${RUBY_VERSION}*
+git rm -r jobs/ruby-${RUBY_VERSION}*
 
 mkdir -p "packages/$ruby_packagename"
 mkdir -p "packages/$test_packagename"
@@ -85,7 +85,7 @@ erb "${template_variables[@]}" "ci/templates/jobs/ruby-test/spec.erb" > "jobs/$t
 erb "${template_variables[@]}" "ci/templates/jobs/ruby-test/templates/cpi.erb" > "jobs/$test_packagename/templates/cpi"
 erb "${template_variables[@]}" "ci/templates/jobs/ruby-test/templates/run.erb" > "jobs/$test_packagename/templates/run"
 
-erb "${template_variables[@]}" "ci/templates/README.md.erb" > README.md
+#erb "${template_variables[@]}" "ci/templates/README.md.erb" > README.md
 
 echo "-----> $(date): Creating git commit"
 

@@ -29,6 +29,6 @@ echo "-----> $(date): Deploy test deployment"
 bosh -n -d test deploy "${release_dir}/manifests/test.yml"
 
 echo "-----> $(date): Run test errand"
-bosh -n -d test run-errand ruby-2.4-test
+bosh -n -d test run-errand ruby-${RUBY_VERSION}-test
 
 echo "-----> $(date): Done"
