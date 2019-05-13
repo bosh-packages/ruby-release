@@ -17,11 +17,11 @@ update:
   update_watch_time: 5000-60000
 
 instance_groups:
-- name: ruby-2.4
+- name: ruby-thin-server
   azs: [z1]
-  instances: 1
+  lifecycle: errand
   jobs:
-  - name: ruby-2.4-test
+  - name: ((ruby-test-package))
     release: ruby-release
     properties: {}
   vm_type: default
