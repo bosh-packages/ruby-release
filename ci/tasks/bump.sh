@@ -9,6 +9,7 @@ set -euxo pipefail
 function replace_if_necessary() {
   package_name=$1
   blobname=$2
+  blob_location=${3:-"../${package_name}"}
   set +x
   bosh_blobs=$(bosh blobs 2>&1)
   set -x
@@ -19,7 +20,7 @@ function replace_if_necessary() {
       bosh remove-blob "${existing_blob}"
     fi
     echo "Adding new blob ${blobname}"
-    bosh add-blob --sha2 "../${package_name}/${blobname}" "${blobname}"
+    bosh add-blob --sha2 "${blob_location}/${blobname}" "${blobname}"
     bosh upload-blobs
   else
     echo "Blob $blobname already exists"
@@ -46,7 +47,7 @@ test_packagename="ruby-$RUBY_VERSION-test"
 echo "-----> $(date): Updating blobs"
 
 bosh blobs
-replace_if_necessary "ruby-$RUBY_VERSION" "$ruby_blob"
+replace_if_necessary "ruby-$RUBY_VERSION" "$ruby_blob" "../ruby"
 replace_if_necessary "rubygems-$RUBYGEMS_VERSION" "$rubygems_blob"
 replace_if_necessary "yaml-$LIBYAML_VERSION" "$yaml_blob"
 
